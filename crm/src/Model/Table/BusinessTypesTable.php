@@ -44,6 +44,9 @@ class BusinessTypesTable extends Table
         $this->setPrimaryKey('type_id');
 
         $this->addBehavior('Timestamp');
+
+
+
     }
 
     /**

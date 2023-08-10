@@ -16,8 +16,11 @@ declare(strict_types=1);
  */
 namespace App;
 
+use App\Service\BusinessService;
+use App\Service\EntityService;
 use Cake\Core\Configure;
 use Cake\Core\ContainerInterface;
+use Cake\Core\Plugin;
 use Cake\Datasource\FactoryLocator;
 use Cake\Error\Middleware\ErrorHandlerMiddleware;
 use Cake\Http\BaseApplication;
@@ -64,13 +67,14 @@ class Application extends BaseApplication
         }
 
         // Load more plugins here
-        $this->addPlugin(\CakeDC\Users\Plugin::class);
+        $this->addPlugin(\CakeDC\Users\Plugin::class, ['routes' => true, 'bootstrap' => true]);
         // Uncomment the line below to load your custom users.php config file
         Configure::write('Users.config', ['users']);
+        Configure::write('Auth.AuthenticationComponent.load', false);
     }
 
     /**
-     * Setup the middleware queue your application will use.
+     * Set up the middleware queue your application will use.
      *
      * @param \Cake\Http\MiddlewareQueue $middlewareQueue The middleware queue to setup.
      * @return \Cake\Http\MiddlewareQueue The updated middleware queue.
@@ -91,7 +95,7 @@ class Application extends BaseApplication
             // If you have a large number of routes connected, turning on routes
             // caching in production could improve performance. For that when
             // creating the middleware instance specify the cache config name by
-            // using it's second constructor argument:
+            // using its second constructor argument:
             // `new RoutingMiddleware($this, '_cake_routes_')`
             ->add(new RoutingMiddleware($this))
 
@@ -118,6 +122,9 @@ class Application extends BaseApplication
      */
     public function services(ContainerInterface $container): void
     {
+        $container->add(BusinessService::class);
+        $container->add(EntityService::class);
+        //$container->addFactory()
     }
 
     /**
