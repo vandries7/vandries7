@@ -72,8 +72,7 @@ class BusinessService
         if ($businessUsersTable->save($businessUser)) {
             return $businessUser;
         }
-        debug($businessUser); exit;
-
+        //debug($businessUser); exit;
         return null;
         // În caz de eroare la salvare
     }

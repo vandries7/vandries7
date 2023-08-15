@@ -35,11 +35,12 @@ class BusinessesController extends AppController
      * @return \Cake\Http\Response|null|void Renders view
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function view($id = null)
+    public function view($id = null, $businessName = null)
     {
         $business = $this->Businesses->get($id, [
             'contain' => [],
         ]);
+        //debug($business);
 
         $this->set(compact('business'));
     }
@@ -48,6 +49,8 @@ class BusinessesController extends AppController
      * Add method
      *
      * @return \Cake\Http\Response|null|void Redirects on successful add, renders view otherwise.
+     * @param \App\Service\BusinessService $businessService
+     * @param \App\Service\EntityService $entityService
      */
     public function add(BusinessService $businessService, EntityService $entityService)
     {
@@ -58,14 +61,10 @@ class BusinessesController extends AppController
           'role !=' => 'superuser'
         ];
         $allUsers = $businessService->getDropdownOptions('CRMUsers', 'id', 'username', $usersCondition);
-        //$allUsers = $businessService->getAllUsersForBusiness();
-
-
 
         if ($this->request->is('post')) {
 
             $requestData = $this->request->getData();
-
 
             $entityService->populateCreatedByModifiedBy($this->Businesses, $requestData, $user['id']);
             unset($requestData['allocated_users']);
@@ -74,9 +73,6 @@ class BusinessesController extends AppController
 
 
             if ($business) {
-
-                //add business_user
-                //$businessService->createBusinessUser($business->id, $user['id']);
 
                 $selectedUsers = $this->request->getData('allocated_users');
                 //debug($business);exit;

@@ -16,6 +16,7 @@ declare(strict_types=1);
  */
 namespace App;
 
+use App\Service\AccessControlService;
 use App\Service\BusinessService;
 use App\Service\EntityService;
 use Cake\Core\Configure;
@@ -124,6 +125,7 @@ class Application extends BaseApplication
     {
         $container->add(BusinessService::class);
         $container->add(EntityService::class);
+        $container->add(AccessControlService::class);
         //$container->addFactory()
     }
 
